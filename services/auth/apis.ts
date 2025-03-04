@@ -17,6 +17,6 @@ export const login = async (data: {
   return (await api.post(`/auth/login`, data)).data;
 };
 
-export const getUser = async (): Promise<{ message: string, status: string, data: { user: User } }> => {
+export const getUser = async (): Promise<User> => {
   return (await api.get(`/auth/me`)).data;
 }

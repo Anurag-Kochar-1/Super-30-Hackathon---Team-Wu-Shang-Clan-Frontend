@@ -8,9 +8,11 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { useLoginMutation } from "@/services/auth/mutations"
+import { useRouter } from "next/navigation"
 
 export function LoginForm() {
     const { mutateAsync, isPending, error } = useLoginMutation()
+    const router = useRouter()
 
     const form = useForm<LoginValues>({
         resolver: zodResolver(loginSchema),
@@ -20,7 +22,7 @@ export function LoginForm() {
         try {
             await mutateAsync(data)
             toast.success("Login Successful")
-            // router.replace("/dashboard")
+            router.replace("/dashboard")
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error_: any) {
             console.log(error_)
