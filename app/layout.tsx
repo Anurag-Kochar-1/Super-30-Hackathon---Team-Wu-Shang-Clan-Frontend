@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <TanstackQueryProvider>
           <TooltipProvider delayDuration={0}>
-            <Toaster />
+            <Toaster richColors />
             {children}
           </TooltipProvider>
         </TanstackQueryProvider>

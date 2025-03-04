@@ -108,7 +108,7 @@ export const Navbar = () => {
                                     Log In
                                 </Link>
                                 <Link
-                                    href="/sign-up"
+                                    href="/register"
                                     className={buttonVariants({ className: "w-full" })}
                                 >
                                     Sign Up
