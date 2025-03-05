@@ -13,6 +13,7 @@ interface InterviewControlState {
 
     // Question navigation
     currentQuestion: Question | null;
+    setCurrentQuestion: (question: Question | null) => void;
     questionIndex: number;
     totalQuestions: number;
     nextQuestion: () => void;
@@ -79,6 +80,9 @@ export const useInterviewControlStore = create<InterviewControlState>((set, get)
                 currentQuestion: questions[questionIndex - 1] || null,
             });
         }
+    },
+    setCurrentQuestion(question) {
+        set({ currentQuestion: question });
     },
 
     setInitialQuestions: (questions: Question[]) => {

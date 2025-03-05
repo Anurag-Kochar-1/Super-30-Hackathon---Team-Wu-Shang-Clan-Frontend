@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import { getInterviewById, getInterviewSessionById } from "./apis"
+import { useParams } from "next/navigation";
 
-export const useGetInterviewByIdQuery = (id: string) => {
+export const useGetInterviewByIdQuery = () => {
+    const params = useParams();
+    const id = params.id as string;
     return useQuery({
         queryKey: ["interview", id],
         queryFn: () => getInterviewById(id),

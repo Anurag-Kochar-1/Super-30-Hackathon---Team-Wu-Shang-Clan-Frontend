@@ -9,6 +9,7 @@ import { Interview, Question } from "@/types";
 import ParticipantVideo from "./participant-video";
 import ChatSidebar from "./chat-sidebar";
 import { Controls } from "./controls";
+import { useInterviewControlStore } from "@/stores/interview-control";
 
 interface InterviewScreenProps {
     interview: Interview;
@@ -19,10 +20,7 @@ export default function InterviewScreen({
     interview,
     onEndCall,
 }: InterviewScreenProps) {
-    const [isMicOn, setIsMicOn] = useState(true);
-    const [isChatOpen, setIsChatOpen] = useState(false);
-    const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
-    const [questionIndex, setQuestionIndex] = useState(0);
+    const { isChatOpen, toggleChat, isMicOn, setCurrentQuestion } = useInterviewControlStore();
     const { mediaStream } = useCameraStore();
     const localVideoRef = useRef<HTMLVideoElement>(null);
 
@@ -33,37 +31,6 @@ export default function InterviewScreen({
         }
     }, [mediaStream]);
 
-    // Toggle microphone
-    const toggleMicrophone = () => {
-        setIsMicOn(!isMicOn);
-
-        if (mediaStream) {
-            mediaStream.getAudioTracks().forEach((track) => {
-                track.enabled = !isMicOn;
-            });
-        }
-    };
-
-    // Toggle chat sidebar
-    const toggleChat = () => {
-        setIsChatOpen(!isChatOpen);
-    };
-
-    // Move to next question
-    const nextQuestion = () => {
-        if (questionIndex < interview.questions.length - 1) {
-            setQuestionIndex(questionIndex + 1);
-            setCurrentQuestion(interview.questions[questionIndex + 1]);
-        }
-    };
-
-    // Move to previous question
-    const prevQuestion = () => {
-        if (questionIndex > 0) {
-            setQuestionIndex(questionIndex - 1);
-            setCurrentQuestion(interview.questions[questionIndex - 1]);
-        }
-    };
 
     // Initialize with first question
     useEffect(() => {
@@ -103,7 +70,7 @@ export default function InterviewScreen({
                     </div>
 
                     {/* Current question display */}
-                    {currentQuestion && (
+                    {/* {currentQuestion && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -144,7 +111,9 @@ export default function InterviewScreen({
                                 </div>
                             )}
                         </motion.div>
-                    )}
+                    )} */}
+
+
                 </div>
 
                 {/* Chat sidebar */}
@@ -159,7 +128,7 @@ export default function InterviewScreen({
                         >
                             <ChatSidebar
                                 interviewId={interview.id}
-                                onClose={() => setIsChatOpen(false)}
+                                onClose={() => toggleChat()}
                             />
                         </motion.div>
                     )}

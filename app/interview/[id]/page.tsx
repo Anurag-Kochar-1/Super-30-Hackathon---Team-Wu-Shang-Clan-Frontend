@@ -10,9 +10,7 @@ import {
 } from "@/services/interview/queries";
 
 export default function InterviewPage() {
-  const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
   const [hasJoined, setHasJoined] = useState(false);
 
 
@@ -21,7 +19,7 @@ export default function InterviewPage() {
     isLoading: isInterviewLoading,
     isError: isInterviewError,
     error: interviewError,
-  } = useGetInterviewByIdQuery(id);
+  } = useGetInterviewByIdQuery();
 
   // useEffect(() => {
   //   if (interview) {

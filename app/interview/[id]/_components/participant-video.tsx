@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
+import { useInterviewStore } from "@/stores/interview";
+import { useInterviewControlStore } from "@/stores/interview-control";
 
 interface ParticipantVideoProps {
     name: string;
@@ -15,6 +17,7 @@ export default function ParticipantVideo({
     avatarUrl,
 }: ParticipantVideoProps) {
     const [isVideoLoaded] = useState(false);
+    const { currentQuestion } = useInterviewControlStore()
 
     return (
         <div className="relative overflow-hidden rounded-lg bg-black">
@@ -42,6 +45,10 @@ export default function ParticipantVideo({
 
             <div className="absolute bottom-4 left-4 rounded-md bg-black/60 px-2 py-1 text-sm text-white">
                 {name} {isInterviewer ? "(Interviewer)" : ""}
+            </div>
+
+            <div className="absolute bottom-20 text-center w-full flex justify-center items-center">
+                <span className="text-white"> {currentQuestion?.content} </span>
             </div>
         </div>
     );

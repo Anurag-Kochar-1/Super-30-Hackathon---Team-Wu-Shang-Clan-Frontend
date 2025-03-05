@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Mic, MicOff, PhoneOff, MessageSquare } from "lucide-react";
 import { useInterviewControlStore } from '@/stores/interview-control';
 import { useInterviewStore } from '@/stores/interview';
+import { useGetInterviewByIdQuery } from '@/services/interview/queries';
 
 export const Controls = () => {
     const {
@@ -11,12 +12,14 @@ export const Controls = () => {
         toggleChat,
         endCall
     } = useInterviewControlStore();
-
     const controlStore = useInterviewControlStore()
     const interviewStore = useInterviewStore()
+    const {
+        data: interview,
+    } = useGetInterviewByIdQuery();
 
     return (
-        <div className="flex justify-center bg-muted p-4">
+        <div className="flex justify-center bg-muted p-4 border-t-2 border-t-border">
             <div className="flex items-center gap-4">
                 <Button
                     variant="outline"
@@ -50,8 +53,9 @@ export const Controls = () => {
                 </Button>
 
                 <Button onClick={() => {
-                    console.log(controlStore)
-                    console.log(interviewStore)
+                    console.log(`controlStore`, controlStore)
+                    console.log(`interviewStore`, interviewStore)
+                    console.log(`questions`, interview?.questions)
                 }}> Log</Button>
             </div>
         </div>

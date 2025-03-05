@@ -84,12 +84,14 @@ export default function PreInterviewScreen({
             return
         }
         try {
-            const data = await mutateAsync({
+            const session = await mutateAsync({
                 interviewId: id
             })
-            setCurrentInterviewSession(data)
-            setInterviewSessionId(data.id)
+            setCurrentInterviewSession(session)
+            setInterviewSessionId(session.id)
             onJoin()
+
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error_: any) {
             console.log(error_)
