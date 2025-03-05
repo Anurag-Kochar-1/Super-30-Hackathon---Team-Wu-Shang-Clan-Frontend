@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import { createInterview, createInterviewSession } from "./apis"
+import { createInterview, createInterviewSession, submitResponse } from "./apis"
 
 export const useCreateInterviewMutation = () => {
     return useMutation({
@@ -11,4 +11,11 @@ export const useCreateInterviewSessionMutation = () => {
     return useMutation({
         mutationFn: createInterviewSession,
     })
+}
+
+export const useSubmitResponseMutation = () => {
+    return useMutation({
+        mutationFn: submitResponse
+    })
+
 }

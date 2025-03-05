@@ -3,6 +3,8 @@ import { Mic, MicOff, PhoneOff, MessageSquare, StopCircle, Disc } from "lucide-r
 import { useGetInterviewByIdQuery } from '@/services/interview/queries';
 import { useTtsStore } from '@/stores/tts';
 import { useInterviewV2Store } from '@/stores/interview-v2';
+import { useSubmitResponseMutation } from '@/services/interview/mutations';
+import { toast } from 'sonner';
 
 export const Controls = () => {
     const {
@@ -13,18 +15,65 @@ export const Controls = () => {
         endCall,
         isRecording,
         startMic,
-        stopMic
-
+        stopMic,
+        interviewSessionId, questionIndex, nextQuestion, transcription
     } = useInterviewV2Store();
     const { isSpeaking } = useTtsStore()
     const interviewStore = useInterviewV2Store()
     const {
         data: interview,
     } = useGetInterviewByIdQuery();
+    const { mutateAsync, isPending } = useSubmitResponseMutation()
+    const { data: currentInterview, isLoading: isCurrentInterviewLoading } = useGetInterviewByIdQuery()
+    // const { mutateAsync: transcribe } = useTranscribeMutation()
+
+    const handleSubmit = async () => {
+        if (isCurrentInterviewLoading || !currentInterview?.questions) {
+            toast.error("Loading interview...")
+            return
+        }
+        const questionId = currentInterview?.questions[questionIndex].id
+        // TODO: HIT STT API
+        // try {
+        //     console.log(`stt - start`)
+        //     const stt = await transcribe(answerBlob)
+        //     console.log(`stt - end`)
+        //     console.log(`stt`)
+        //     console.log(stt)
+        // } catch (error) {
+        //     console.log(`error stt`)
+        //     console.log(error)
+        // }
+
+
+        if (!questionId || !interviewSessionId) {
+            toast.error("Question id or interview session id is not defined!")
+            return
+        }
+
+        try {
+            const transcription_2 = useInterviewV2Store.getState().transcription
+            console.log(` transcription_2 from store`,  transcription_2)
+            const response = await mutateAsync({
+                sessionId: interviewSessionId,
+                answerData: {
+                    questionId,
+                    content:  transcription_2 ?? "I don't know"
+                }
+            })
+            console.log(`responseresponseresponseresponse`)
+            console.log(response)
+            nextQuestion()
+        } catch (error) {
+            console.log(error)
+            toast.error("Error while submitting response")
+        }
+    }
 
     const toggleRecording = () => {
         if (isRecording) {
             stopMic();
+            handleSubmit()
         } else {
             startMic();
         }
@@ -85,6 +134,9 @@ export const Controls = () => {
                     console.log(`interview_v2_Store`, interviewStore)
                     console.log(`questions`, interview?.questions)
                 }}> Log</Button>
+
+
+                {isPending ? "Submitting....." : null}
             </div>
         </div>
     );

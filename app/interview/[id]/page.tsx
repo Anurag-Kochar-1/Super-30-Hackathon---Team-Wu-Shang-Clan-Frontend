@@ -7,10 +7,11 @@ import {
   useGetInterviewByIdQuery,
 } from "@/services/interview/queries";
 import { useInterviewV2Store } from "@/stores/interview-v2";
+import { useEffect } from "react";
 
 export default function InterviewPage() {
   const router = useRouter();
-  const { setTotalQuestions, setHasJoined, hasJoined } = useInterviewV2Store()
+  const { setTotalQuestions, setHasJoined, hasJoined, setCurrentInterview } = useInterviewV2Store()
 
   const {
     data: interview,
@@ -18,6 +19,13 @@ export default function InterviewPage() {
     isError: isInterviewError,
     error: interviewError,
   } = useGetInterviewByIdQuery();
+
+  useEffect(() => {
+    if (!isInterviewLoading && interview) {
+      setCurrentInterview(interview)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInterviewLoading])
 
   const handleJoinInterview = () => {
     setHasJoined(true);

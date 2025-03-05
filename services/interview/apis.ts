@@ -17,3 +17,14 @@ export const getInterviewById = async (id: string): Promise<Interview> => {
 export const getInterviewSessionById = async (id: string): Promise<InterviewSession> => {
     return (await api.get(`/interview-sessions/${id}`)).data
 }
+
+
+export const submitResponse = async (data: {
+    sessionId: string, answerData: {
+        questionId?: string,
+        content?: string,
+        codeResponse?: string
+    }
+}) => {
+    return await api.post(`/interview-sessions/${data.sessionId}/responses`, data.answerData)
+}

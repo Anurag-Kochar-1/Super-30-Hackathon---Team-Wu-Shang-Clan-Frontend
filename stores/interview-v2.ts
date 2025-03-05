@@ -1,6 +1,7 @@
-import { Interview, InterviewSession, Question } from "@/types";
+import { Interview, InterviewSession, Question, QuestionType } from "@/types";
 import { create } from "zustand";
 import { useCameraStore } from "./camera";
+import { transcribe } from "@/services/transcribe/apis";
 
 interface State {
     hasJoined: boolean
@@ -44,6 +45,13 @@ interface State {
     endCall: () => void;
     setEndCallHandler: (handler: () => void) => void;
 
+    answerBlob: Blob | null;
+    setAnswerBlob: (data: Blob | null) => void
+
+
+    transcription: string | null
+    setTranscription: (data: string | null) => void
+
 }
 
 export const useInterviewV2Store = create<State>(
@@ -60,6 +68,8 @@ export const useInterviewV2Store = create<State>(
         interviewSessionId: null,
         setInterviewSessionId: (interviewSessionId) => set({ interviewSessionId }),
 
+        answerBlob: null,
+        setAnswerBlob: (blob) => set({ answerBlob: blob }),
 
         // Microphone state
         isMicOn: true,
@@ -174,7 +184,7 @@ export const useInterviewV2Store = create<State>(
             }
         },
 
-        stopMic: () => {
+        stopMic: async () => {
             const { mediaRecorder, audioChunks } = get();
 
             if (!mediaRecorder) {
@@ -194,7 +204,7 @@ export const useInterviewV2Store = create<State>(
                 mediaRecorder.requestData();
 
                 // Define what happens when recording stops
-                mediaRecorder.onstop = () => {
+                mediaRecorder.onstop = async () => {
                     try {
                         if (!audioChunks || audioChunks.length === 0) {
                             console.warn("No audio data recorded");
@@ -218,6 +228,25 @@ export const useInterviewV2Store = create<State>(
                         // Force download using a more direct approach
                         const url = URL.createObjectURL(audioBlob);
                         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+
+                        // useInterviewV2Store.setState({ answerBlob: audioBlob })
+                        // console.log(`audioBlob from store -> `, audioBlob)
+
+
+                        try {
+                            const transcribedData = await transcribe(audioBlob)
+                            console.log(`x from store - t `, transcribedData)
+                            if (transcribedData.success) {
+                                const transcription = transcribedData.transcription
+                                set({ transcription: transcription })
+
+                            }
+
+
+                        } catch (error) {
+                            console.log(`error from store t -t`, error)
+
+                        }
 
                         // Determine file extension based on MIME type
                         let extension = "webm";
@@ -252,7 +281,10 @@ export const useInterviewV2Store = create<State>(
                             console.log("Download cleanup completed");
                         }, 100);
 
-                        get().nextQuestion()
+                        // TODO: send audio to backend
+
+                        // get().nextQuestion()
+
                     } catch (error) {
                         console.error("Error processing recording:", error);
                     } finally {
@@ -306,9 +338,14 @@ export const useInterviewV2Store = create<State>(
 
             if (questionIndex < totalQuestions - 1) {
                 const questions = get().currentInterview?.questions || [];
+                const question = questions[questionIndex + 1] || null
+                if (question.type === QuestionType.CODE) {
+                    set({ isChatOpen: true })
+                }
+
                 set({
                     questionIndex: questionIndex + 1,
-                    currentQuestion: questions[questionIndex + 1] || null,
+                    currentQuestion: question,
                 });
             }
         },
@@ -329,5 +366,9 @@ export const useInterviewV2Store = create<State>(
         setEndCallHandler: (handler: () => void) => {
             set({ endCall: handler });
         },
+        transcription: null,
+        setTranscription: (data) => {
+            set({ transcription: data })
+        }
     })
 );
