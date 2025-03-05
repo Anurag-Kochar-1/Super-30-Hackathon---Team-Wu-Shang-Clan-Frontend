@@ -31,9 +31,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 export const GenerateMockInterviewForm = () => {
     const { data: resumes } = useGetMyResumesQuery()
-    const { closeDialog, setIsGenerated, setInterviewLink } = useGenerateMockInterviewStore();
-    const { mutateAsync, isPending, error } = useCreateJobListingMutation()
-    const { mutateAsync: createInterviewMutate, isPending: isCreateInterviewPending, error: interviewError } = useCreateInterviewMutation()
+    const { setIsGenerated, setInterviewLink } = useGenerateMockInterviewStore();
+    const { mutateAsync, isPending, } = useCreateJobListingMutation()
+    const { mutateAsync: createInterviewMutate, isPending: isCreateInterviewPending } = useCreateInterviewMutation()
 
     // Initialize react-hook-form
     const form = useForm<FormValues>({
@@ -53,6 +53,8 @@ export const GenerateMockInterviewForm = () => {
                 toast.error('Please create a resume first')
                 return
             }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const resumeId = resumes[0]?.id
             console.log(resumes)
             console.log(resumeId)

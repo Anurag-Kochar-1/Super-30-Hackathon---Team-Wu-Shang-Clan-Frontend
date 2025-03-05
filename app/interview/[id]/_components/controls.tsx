@@ -1,9 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Mic, MicOff, PhoneOff, MessageSquare, StopCircle, Disc } from "lucide-react";
-import { useInterviewControlStore } from '@/stores/interview-control';
-import { useInterviewStore } from '@/stores/interview';
 import { useGetInterviewByIdQuery } from '@/services/interview/queries';
 import { useTtsStore } from '@/stores/tts';
+import { useInterviewV2Store } from '@/stores/interview-v2';
 
 export const Controls = () => {
     const {
@@ -16,10 +15,9 @@ export const Controls = () => {
         startMic,
         stopMic
 
-    } = useInterviewControlStore();
+    } = useInterviewV2Store();
     const { isSpeaking } = useTtsStore()
-    const controlStore = useInterviewControlStore()
-    const interviewStore = useInterviewStore()
+    const interviewStore = useInterviewV2Store()
     const {
         data: interview,
     } = useGetInterviewByIdQuery();
@@ -84,8 +82,7 @@ export const Controls = () => {
                 </Button>
 
                 <Button onClick={() => {
-                    console.log(`controlStore`, controlStore)
-                    console.log(`interviewStore`, interviewStore)
+                    console.log(`interview_v2_Store`, interviewStore)
                     console.log(`questions`, interview?.questions)
                 }}> Log</Button>
             </div>

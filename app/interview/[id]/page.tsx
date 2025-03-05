@@ -1,20 +1,16 @@
 "use client";
-
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import PreInterviewScreen from "./_components/pre-interview-screen";
 import InterviewScreen from "./_components/interview-screen";
 import {
   useGetInterviewByIdQuery,
 } from "@/services/interview/queries";
-import { useInterviewControlStore } from "@/stores/interview-control";
+import { useInterviewV2Store } from "@/stores/interview-v2";
 
 export default function InterviewPage() {
   const router = useRouter();
-  const [hasJoined, setHasJoined] = useState(false);
-  const { setTotalQuestions } = useInterviewControlStore()
-
+  const { setTotalQuestions, setHasJoined, hasJoined } = useInterviewV2Store()
 
   const {
     data: interview,
@@ -23,21 +19,13 @@ export default function InterviewPage() {
     error: interviewError,
   } = useGetInterviewByIdQuery();
 
-  // useEffect(() => {
-  //   if (interview) {
-  //     setCurrentInterview(interview);
-  //   }
-  // }, [interview, setCurrentInterview]);
-
-  // Handle join interview
   const handleJoinInterview = () => {
     setHasJoined(true);
     setTotalQuestions(interview?.questions?.length || 0)
   };
 
-  // Handle end call
   const handleEndCall = () => {
-    router.push("/interviews");
+    router.push("/dashboard");
   };
 
   if (isInterviewLoading) {

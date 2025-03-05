@@ -1,11 +1,24 @@
+import { Interview, InterviewSession, Question } from "@/types";
 import { create } from "zustand";
-import { Question } from "@/types";
 import { useCameraStore } from "./camera";
-import { useInterviewStore } from "./interview";
 
-interface InterviewControlState {
+interface State {
+    hasJoined: boolean
+    setHasJoined: (val: boolean) => void
+
+    // Interview
+    currentInterview: Interview | null;
+    setCurrentInterview: (interview: Interview) => void;
+
+    // Session state
+    currentInterviewSession: InterviewSession | null;
+    setCurrentInterviewSession: (interviewSession: InterviewSession) => void;
+    interviewSessionId: string | null;
+    setInterviewSessionId: (interviewSessionId: string | null) => void;
+
     // Microphone state
     isMicOn: boolean;
+    setIsMicOn: (val: boolean) => void;
     toggleMicrophone: () => void;
 
     // Recording state
@@ -26,17 +39,33 @@ interface InterviewControlState {
     totalQuestions: number;
     setTotalQuestions: (data: number) => void
     nextQuestion: () => void;
-    setInitialQuestions: (questions: Question[]) => void;
 
     // Call control
     endCall: () => void;
     setEndCallHandler: (handler: () => void) => void;
+
 }
 
-export const useInterviewControlStore = create<InterviewControlState>(
+export const useInterviewV2Store = create<State>(
     (set, get) => ({
+        hasJoined: false,
+        setHasJoined(val) {
+            set({ hasJoined: val })
+        },
+
+        currentInterview: null,
+        setCurrentInterview: (interview) => set({ currentInterview: interview }),
+        currentInterviewSession: null,
+        setCurrentInterviewSession: (interviewSession) => set({ currentInterviewSession: interviewSession }),
+        interviewSessionId: null,
+        setInterviewSessionId: (interviewSessionId) => set({ interviewSessionId }),
+
+
         // Microphone state
         isMicOn: true,
+        setIsMicOn(val) {
+            set({ isMicOn: val })
+        },
         toggleMicrophone: () => {
             const { isMicOn } = get();
 
@@ -233,12 +262,6 @@ export const useInterviewControlStore = create<InterviewControlState>(
                             audioChunks: [],
                             isRecording: false,
                         });
-
-
-
-
-
-
                     }
                 };
 
@@ -282,9 +305,7 @@ export const useInterviewControlStore = create<InterviewControlState>(
             console.log(`totalQuestions - ${totalQuestions}`)
 
             if (questionIndex < totalQuestions - 1) {
-                const questions =
-                    useInterviewStore?.getState()?.currentInterview?.questions || [];
-
+                const questions = get().currentInterview?.questions || [];
                 set({
                     questionIndex: questionIndex + 1,
                     currentQuestion: questions[questionIndex + 1] || null,

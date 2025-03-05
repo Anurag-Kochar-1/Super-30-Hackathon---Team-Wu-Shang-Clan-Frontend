@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
-import { useInterviewControlStore } from "@/stores/interview-control";
+import { useInterviewV2Store } from "@/stores/interview-v2";
 
 interface ParticipantVideoProps {
     name: string;
@@ -16,7 +16,7 @@ export default function ParticipantVideo({
     avatarUrl,
 }: ParticipantVideoProps) {
     const [isVideoLoaded] = useState(false);
-    const { currentQuestion } = useInterviewControlStore()
+    const { currentQuestion } = useInterviewV2Store()
 
     return (
         <div className="relative overflow-hidden rounded-lg bg-black">

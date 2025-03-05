@@ -9,8 +9,7 @@ import { useCameraStore } from "@/stores/camera";
 import { toast } from "sonner";
 import { useCreateInterviewSessionMutation } from "@/services/interview/mutations";
 import { useParams } from "next/navigation";
-import { useInterviewStore } from "@/stores/interview";
-import { useInterviewControlStore } from "@/stores/interview-control";
+import { useInterviewV2Store } from "@/stores/interview-v2";
 
 interface PreInterviewScreenProps {
     interviewTitle: string;
@@ -22,13 +21,12 @@ export default function PreInterviewScreen({
     onJoin,
 }: PreInterviewScreenProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [isMicOn, setIsMicOn] = useState(true);
     const [isVideoOn, setIsVideoOn] = useState(true);
     const { setMediaStream, mediaStream } = useCameraStore();
-    const {} = useInterviewControlStore()
     const { id } = useParams<{ id: string }>()
     const { mutateAsync, isPending, } = useCreateInterviewSessionMutation()
-    const { setCurrentInterviewSession, setInterviewSessionId } = useInterviewStore()
+    const { setCurrentInterviewSession, setInterviewSessionId, isMicOn, setIsMicOn } = useInterviewV2Store()
+    
 
     useEffect(() => {
         const setupMediaDevices = async () => {
@@ -92,8 +90,6 @@ export default function PreInterviewScreen({
             setCurrentInterviewSession(session)
             setInterviewSessionId(session.id)
             onJoin()
-
-
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error_: any) {
             console.log(error_)
