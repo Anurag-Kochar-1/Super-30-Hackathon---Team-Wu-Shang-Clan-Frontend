@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Question } from "@/types";
 import { useCameraStore } from "./camera";
+import { useInterviewStore } from "./interview";
 
 interface InterviewControlState {
     // Microphone state
@@ -23,8 +24,8 @@ interface InterviewControlState {
     setCurrentQuestion: (question: Question | null) => void;
     questionIndex: number;
     totalQuestions: number;
+    setTotalQuestions: (data: number) => void
     nextQuestion: () => void;
-    prevQuestion: () => void;
     setInitialQuestions: (questions: Question[]) => void;
 
     // Call control
@@ -115,7 +116,7 @@ export const useInterviewControlStore = create<InterviewControlState>(
                         console.log('Audio chunks count:', audioChunks.length);
 
                         // Update the state with the new chunks
-                        set(state => ({
+                        set(() => ({
                             audioChunks: [...audioChunks]
                         }));
                     }
@@ -221,6 +222,8 @@ export const useInterviewControlStore = create<InterviewControlState>(
 
                             console.log("Download cleanup completed");
                         }, 100);
+
+                        get().nextQuestion()
                     } catch (error) {
                         console.error("Error processing recording:", error);
                     } finally {
@@ -230,6 +233,12 @@ export const useInterviewControlStore = create<InterviewControlState>(
                             audioChunks: [],
                             isRecording: false,
                         });
+
+
+
+
+
+
                     }
                 };
 
@@ -260,36 +269,25 @@ export const useInterviewControlStore = create<InterviewControlState>(
         currentQuestion: null,
         questionIndex: 0,
         totalQuestions: 0,
+        setTotalQuestions(data) {
+            set({ totalQuestions: data })
+        },
         setCurrentQuestion: (question) => {
             set({ currentQuestion: question });
         },
 
         nextQuestion: () => {
+            console.log(`next question called from inteview control`)
             const { questionIndex, totalQuestions } = get();
+            console.log(`totalQuestions - ${totalQuestions}`)
 
             if (questionIndex < totalQuestions - 1) {
-                // Get questions from the interview store
                 const questions =
-                    useCameraStore?.getState()?.currentInterview?.questions || [];
+                    useInterviewStore?.getState()?.currentInterview?.questions || [];
 
                 set({
                     questionIndex: questionIndex + 1,
                     currentQuestion: questions[questionIndex + 1] || null,
-                });
-            }
-        },
-
-        prevQuestion: () => {
-            const { questionIndex } = get();
-
-            if (questionIndex > 0) {
-                // Get questions from the interview store
-                const questions =
-                    useCameraStore?.getState()?.currentInterview?.questions || [];
-
-                set({
-                    questionIndex: questionIndex - 1,
-                    currentQuestion: questions[questionIndex - 1] || null,
                 });
             }
         },

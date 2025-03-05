@@ -8,10 +8,12 @@ import InterviewScreen from "./_components/interview-screen";
 import {
   useGetInterviewByIdQuery,
 } from "@/services/interview/queries";
+import { useInterviewControlStore } from "@/stores/interview-control";
 
 export default function InterviewPage() {
   const router = useRouter();
   const [hasJoined, setHasJoined] = useState(false);
+  const { setTotalQuestions } = useInterviewControlStore()
 
 
   const {
@@ -30,6 +32,7 @@ export default function InterviewPage() {
   // Handle join interview
   const handleJoinInterview = () => {
     setHasJoined(true);
+    setTotalQuestions(interview?.questions?.length || 0)
   };
 
   // Handle end call

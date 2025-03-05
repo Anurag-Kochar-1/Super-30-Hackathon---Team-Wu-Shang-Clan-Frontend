@@ -30,7 +30,7 @@ export default function InterviewScreen({
     const initialLoadRef = useRef(true); // Track initial load
 
     useTtsVoices();
-    const { speak, stop, isSpeaking } = useTtsStore();
+    const { speak, stop } = useTtsStore();
 
     // Set up local video stream
     useEffect(() => {
@@ -68,18 +68,6 @@ export default function InterviewScreen({
         };
     }, [interview.questions, questionIndex, setCurrentQuestion, speak, stop]);
 
-    // Navigation functions
-    const nextQuestion = () => {
-        if (questionIndex < interview?.questions.length - 1) {
-            setQuestionIndex(questionIndex + 1);
-        }
-    };
-
-    const prevQuestion = () => {
-        if (questionIndex > 0) {
-            setQuestionIndex(questionIndex - 1);
-        }
-    };
 
     return (
         <div className="flex h-full flex-col">

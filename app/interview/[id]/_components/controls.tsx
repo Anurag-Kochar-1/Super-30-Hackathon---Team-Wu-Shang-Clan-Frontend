@@ -41,6 +41,7 @@ export const Controls = () => {
                     size="icon"
                     className="h-12 w-12 rounded-full"
                     onClick={toggleMicrophone}
+                    disabled={isSpeaking}
                 >
                     {isMicOn ? (
                         <Mic className="h-6 w-6" />
@@ -55,6 +56,7 @@ export const Controls = () => {
                     size="icon"
                     className="h-12 w-12 rounded-full"
                     onClick={toggleRecording}
+                    disabled={isSpeaking}
                 >
                     {isRecording ? (
                         <StopCircle className="h-6 w-6 text-red-500" />

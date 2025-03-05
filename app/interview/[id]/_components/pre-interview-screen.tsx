@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useCreateInterviewSessionMutation } from "@/services/interview/mutations";
 import { useParams } from "next/navigation";
 import { useInterviewStore } from "@/stores/interview";
+import { useInterviewControlStore } from "@/stores/interview-control";
 
 interface PreInterviewScreenProps {
     interviewTitle: string;
@@ -24,6 +25,7 @@ export default function PreInterviewScreen({
     const [isMicOn, setIsMicOn] = useState(true);
     const [isVideoOn, setIsVideoOn] = useState(true);
     const { setMediaStream, mediaStream } = useCameraStore();
+    const {} = useInterviewControlStore()
     const { id } = useParams<{ id: string }>()
     const { mutateAsync, isPending, } = useCreateInterviewSessionMutation()
     const { setCurrentInterviewSession, setInterviewSessionId } = useInterviewStore()
