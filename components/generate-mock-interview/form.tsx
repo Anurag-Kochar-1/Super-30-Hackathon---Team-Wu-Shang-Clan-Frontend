@@ -57,10 +57,10 @@ export const GenerateMockInterviewForm = () => {
             console.log(resumes)
             console.log(resumeId)
             const interview = await createInterviewMutate({ jobListingId: response.id, resumeId })
-            
+
             console.log(interview)
             setIsGenerated(true)
-            setInterviewLink(`/interview/${interview.id}`)
+            setInterviewLink(`${window.location.origin}/interview/${interview.id}`)
 
             toast.success('Mock interview generated successfully!')
             console.log(response)
