@@ -1,5 +1,5 @@
 // components/interview/participant-video.tsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 
@@ -14,24 +14,11 @@ export default function ParticipantVideo({
     isInterviewer,
     avatarUrl,
 }: ParticipantVideoProps) {
-    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-
-    // Simulate video connection for interviewer
-    // In a real app, this would be replaced with actual WebRTC connections
-    useEffect(() => {
-        if (isInterviewer) {
-            const timer = setTimeout(() => {
-                setIsVideoLoaded(true);
-            }, 1500);
-
-            return () => clearTimeout(timer);
-        }
-    }, [isInterviewer]);
+    const [isVideoLoaded] = useState(false);
 
     return (
         <div className="relative overflow-hidden rounded-lg bg-black">
             {isInterviewer && isVideoLoaded ? (
-                // This would be a real video stream in production
                 <video
                     autoPlay
                     playsInline

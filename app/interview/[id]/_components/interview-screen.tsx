@@ -2,12 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, PhoneOff, MessageSquare } from "lucide-react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useCameraStore } from "@/stores/camera";
-import ChatSidebar from "./chat-sidebar";
-import ParticipantVideo from "./participant-video";
 import { Interview, Question } from "@/types";
+import ParticipantVideo from "./participant-video";
+import ChatSidebar from "./chat-sidebar";
+import { Controls } from "./controls";
 
 interface InterviewScreenProps {
     interview: Interview;
@@ -80,9 +81,10 @@ export default function InterviewScreen({
                     <div className="grid h-full grid-cols-1 gap-4 lg:grid-cols-2">
                         {/* Interviewer */}
                         <ParticipantVideo
-                            name={interview.interviewer.name}
+                            // name={interview.interviewer.name}
+                            name={"BOT"}
                             isInterviewer={true}
-                            avatarUrl={interview.interviewer.avatarUrl}
+                            avatarUrl={"interview.interviewer.avatarUrl"}
                         />
 
                         {/* Interviewee (You) */}
@@ -164,41 +166,7 @@ export default function InterviewScreen({
                 </AnimatePresence>
             </div>
 
-            {/* Controls */}
-            <div className="flex justify-center bg-muted p-4">
-                <div className="flex items-center gap-4">
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-12 w-12 rounded-full"
-                        onClick={toggleMicrophone}
-                    >
-                        {isMicOn ? (
-                            <Mic className="h-6 w-6" />
-                        ) : (
-                            <MicOff className="h-6 w-6 text-destructive" />
-                        )}
-                    </Button>
-
-                    <Button
-                        variant="destructive"
-                        size="icon"
-                        className="h-12 w-12 rounded-full"
-                        onClick={onEndCall}
-                    >
-                        <PhoneOff className="h-6 w-6" />
-                    </Button>
-
-                    <Button
-                        variant={isChatOpen ? "default" : "outline"}
-                        size="icon"
-                        className="h-12 w-12 rounded-full"
-                        onClick={toggleChat}
-                    >
-                        <MessageSquare className="h-6 w-6" />
-                    </Button>
-                </div>
-            </div>
+            <Controls />
         </div>
     );
 }

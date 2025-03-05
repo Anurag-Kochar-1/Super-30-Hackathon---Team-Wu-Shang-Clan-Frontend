@@ -7,6 +7,9 @@ import { Mic, MicOff, Video, VideoOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCameraStore } from "@/stores/camera";
 import { toast } from "sonner";
+import { useCreateInterviewSessionMutation } from "@/services/interview/mutations";
+import { useParams } from "next/navigation";
+import { useInterviewStore } from "@/stores/interview";
 
 interface PreInterviewScreenProps {
     interviewTitle: string;
@@ -21,6 +24,9 @@ export default function PreInterviewScreen({
     const [isMicOn, setIsMicOn] = useState(true);
     const [isVideoOn, setIsVideoOn] = useState(true);
     const { setMediaStream, mediaStream } = useCameraStore();
+    const { id } = useParams<{ id: string }>()
+    const { mutateAsync, isPending, } = useCreateInterviewSessionMutation()
+    const { setCurrentInterviewSession, setInterviewSessionId } = useInterviewStore()
 
     useEffect(() => {
         const setupMediaDevices = async () => {
@@ -72,12 +78,25 @@ export default function PreInterviewScreen({
         }
     };
 
-    const handleJoin = () => {
+    const handleJoin = async () => {
         if (!isMicOn || !isVideoOn) {
             toast.error("Please turn on both microphone and camera")
             return
         }
-        onJoin()
+        try {
+            const data = await mutateAsync({
+                interviewId: id
+            })
+            setCurrentInterviewSession(data)
+            setInterviewSessionId(data.id)
+            onJoin()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error_: any) {
+            console.log(error_)
+            const message = error_.response?.data?.message ?? error_.message ?? "Something went wrong"
+            toast.error(message)
+
+        }
     }
 
     return (
@@ -118,6 +137,7 @@ export default function PreInterviewScreen({
                             size="icon"
                             className="h-12 w-12 rounded-full"
                             onClick={toggleMicrophone}
+                            disabled={isPending}
                         >
                             {isMicOn ? (
                                 <Mic className="h-6 w-6" />
@@ -131,6 +151,7 @@ export default function PreInterviewScreen({
                             size="icon"
                             className="h-12 w-12 rounded-full"
                             onClick={toggleVideo}
+                            disabled={isPending}
                         >
                             {isVideoOn ? (
                                 <Video className="h-6 w-6" />
@@ -143,8 +164,9 @@ export default function PreInterviewScreen({
                             size="lg"
                             className="ml-4 px-8"
                             onClick={handleJoin}
+                            disabled={isPending}
                         >
-                            Join Interview
+                            {isPending ? "Joining..." : "Join Interview"}
                         </Button>
                     </div>
                 </Card>
