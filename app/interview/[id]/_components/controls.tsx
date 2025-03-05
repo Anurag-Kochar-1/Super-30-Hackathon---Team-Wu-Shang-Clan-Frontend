@@ -16,7 +16,7 @@ export const Controls = () => {
         isRecording,
         startMic,
         stopMic,
-        interviewSessionId, questionIndex, nextQuestion, transcription
+        interviewSessionId, questionIndex, nextQuestion
     } = useInterviewV2Store();
     const { isSpeaking } = useTtsStore()
     const interviewStore = useInterviewV2Store()

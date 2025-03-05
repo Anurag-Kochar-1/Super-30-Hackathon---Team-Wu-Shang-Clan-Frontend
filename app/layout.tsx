@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mock Mate",
+  title: "100xPrep",
 };
 
 export default function RootLayout({

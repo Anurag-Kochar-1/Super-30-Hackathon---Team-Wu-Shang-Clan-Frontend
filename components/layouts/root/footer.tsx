@@ -89,7 +89,7 @@ export const Footer = () => {
                 <Separator className="my-6" />
                 <section className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <h3 className="">
-                        &copy; 2025 Mock Mate. All rights reserved.
+                        &copy; 2025 100xPrep. All rights reserved.
                     </h3>
                     <div className="flex gap-6">
                         <Link href="https://twitter.com/" className="opacity-60 hover:opacity-100">
