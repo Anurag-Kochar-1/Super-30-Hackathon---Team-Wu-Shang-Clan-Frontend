@@ -124,7 +124,7 @@ export const Navbar = () => {
                 <Link href="/login" className={buttonVariants({ variant: "secondary" })}>
                     Log In
                 </Link>
-                <Link href="/sign-up" className={buttonVariants({})}>
+                <Link href="/register" className={buttonVariants({})}>
                     Sign Up
                 </Link>
             </div>
