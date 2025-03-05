@@ -1,8 +1,7 @@
-// components/interview/participant-video.tsx
+"use client"
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
-import { useInterviewStore } from "@/stores/interview";
 import { useInterviewControlStore } from "@/stores/interview-control";
 
 interface ParticipantVideoProps {
