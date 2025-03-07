@@ -12,7 +12,7 @@ export function ThreeD() {
             <Loader />
             <Leva hidden />
             <UI />
-            <Canvas className="bg-red-500 border-blue-600 border-2 w-full !h-screen" shadows camera={{ position: [0, 0, 1], fov: 30 }}>
+            <Canvas className="w-full bg-pink-900 !h-full aspect-square" shadows camera={{ position: [0, 0, 1], fov: 30 }}>
                 <Experience />
             </Canvas>
         </ChatProvider>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 import { useInterviewV2Store } from "@/stores/interview-v2";
+import { ThreeD } from "./3d-interviewer";
 
 interface ParticipantVideoProps {
     name: string;
@@ -20,7 +21,8 @@ export default function ParticipantVideo({
 
     return (
         <div className="relative overflow-hidden rounded-lg bg-black">
-            {isInterviewer && isVideoLoaded ? (
+            <ThreeD />
+            {/* {isInterviewer && isVideoLoaded ? (
                 <video
                     autoPlay
                     playsInline
@@ -48,7 +50,7 @@ export default function ParticipantVideo({
 
             <div className="absolute bottom-20 text-center w-full flex justify-center items-center">
                 <span className="text-white"> {currentQuestion?.content} </span>
-            </div>
+            </div> */}
         </div>
     );
 }
