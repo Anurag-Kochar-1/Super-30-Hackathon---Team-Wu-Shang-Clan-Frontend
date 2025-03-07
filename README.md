@@ -1,4 +1,4 @@
-[Backend Repo](https://github.com/Anurag-Kochar-1/1-Super-30-Hackathon---Team-Wu-Shang-Clan-Backend)
+[Backend Repo](https://github.com/Anurag-Kochar-1/1-Super-30-Hackathon---Team-Wu-Shang-Clan-Backend/tree/master)
 
 
 
