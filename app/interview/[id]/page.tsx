@@ -49,7 +49,7 @@ export default function InterviewPage() {
       <div className="flex h-screen flex-col items-center justify-center">
         <h1 className="text-2xl font-bold">Interview not found</h1>
         <p className="mt-2 text-gray-500">
-          The interview you are looking for does not exist. - {interviewError?.message}
+          The interview you are looking for does not exist. - {interviewError?.message ?? "Something went wrong, please check the interview id / interview link."}
         </p>
         <button
           onClick={() => router.push("/dashboard")}
